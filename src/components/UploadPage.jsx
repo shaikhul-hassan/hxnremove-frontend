@@ -120,7 +120,7 @@ export default function UploadPage() {
             <img src={logo} alt="remo" className="h-12 w-auto  mx-auto mb-8 dark: opacity-80" />
             
             <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-4 leading-tight">
-              Welcome my dearest <span className="text-indigo-600 dark:text-indigo-400">Manjurul Bro</span>, <br />
+              Welcome<span className="text-indigo-600 dark:text-indigo-400"> </span><br />
               <span className="text-zinc-600 dark:text-zinc-300 font-medium text-xl">I hope you enjoy this tool.</span>
             </h2>
             
