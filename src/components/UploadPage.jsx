@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import logo from '../../public/remologo.png'; 
 
 export default function UploadPage() {
+  const [showWelcome, setShowWelcome] = useState(true); // Welcome state
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [result, setResult] = useState(null);
@@ -33,7 +34,7 @@ export default function UploadPage() {
     setResult(null);
     setPreview(URL.createObjectURL(selectedFile));
   };
-
+ 
   const handleUpload = async () => {
     if (!file) return;
     setStatus('loading');
@@ -98,8 +99,36 @@ export default function UploadPage() {
   const checkerboardBg = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYNgNwEg1gIFRDUAQAKBgZCxg/P//PwMFH0MwU8jA2EAxQAMjQzQeAAD1hgcH9V+QfwAAAABJRU5ErkJggg==')";
 
   return (
-    <div className="min-h-screen bg-[#fafafa] dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 flex flex-col items-center justify-center p-6 transition-colors duration-700 font-sans">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 flex flex-col items-center justify-center p-6 transition-colors duration-700 font-sans relative">
       
+      {/* --- WELCOME SCREEN OVERLAY --- */}
+      {showWelcome && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-700">
+          <div className="absolute inset-0 bg-white/20 dark:bg-black/40 backdrop-blur-[60px]"></div>
+          
+          <div className="relative bg-white/40 dark:bg-zinc-900/40 border border-white/20 dark:border-zinc-800/50 p-10 md:p-16 rounded-[3rem] shadow-2xl text-center max-w-lg transition-all transform scale-100 hover:scale-[1.02]">
+            <img src={logo} alt="remo" className="h-12 w-auto  mx-auto mb-8 dark: opacity-80" />
+            
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-4 leading-tight">
+              Welcome my dearest <span className="text-indigo-600 dark:text-indigo-400">Manjurul Bro</span>, <br />
+              <span className="text-zinc-600 dark:text-zinc-300 font-medium text-xl">I hope you enjoy this tool.</span>
+            </h2>
+            
+            <p className="text-zinc-500 text-sm mb-10 leading-relaxed font-medium">
+              We've prepared the professional AI engine for your creative workflow.
+            </p>
+            
+            <button 
+              onClick={() => setShowWelcome(false)}
+              className="px-10 py-4 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-2xl font-bold text-sm tracking-widest hover:opacity-90 active:scale-95 transition-all shadow-xl"
+            >
+              ENTER ENGINE
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* --- MAIN PAGE CONTENT (Intact) --- */}
       <nav className="fixed top-0 w-full flex justify-center py-8 z-10">
         <div className="flex flex-col items-center gap-2">
           <img src={logo} alt="remo" className="h-10 w-auto grayscale dark:invert opacity-100 transition-all hover:opacity-100" />
@@ -166,7 +195,6 @@ export default function UploadPage() {
                 </button>
               </div>
 
-              {/* Main Preview Container */}
               <div 
                 className="relative rounded-[2rem] overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl aspect-square flex items-center justify-center transition-all duration-700"
                 style={{ 
@@ -177,7 +205,6 @@ export default function UploadPage() {
                  <img src={result} alt="Result" className="max-w-[85%] max-h-[85%] object-contain drop-shadow-2xl" />
               </div>
 
-              {/* Background Selectors */}
               <div className="space-y-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Environment Preset</span>
                 <div className="flex flex-wrap gap-4 items-center">
@@ -187,25 +214,17 @@ export default function UploadPage() {
                       onClick={() => setSelectedBg(bg.value)}
                       className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-110 overflow-hidden relative ${selectedBg === bg.value ? 'border-indigo-500 ring-4 ring-indigo-500/10 scale-110' : 'border-zinc-100 dark:border-zinc-800'}`}
                     >
-                      {/* Checkerboard layer only for transparent preset */}
                       {bg.value === 'transparent' && (
                         <div className="absolute inset-0" style={{ backgroundImage: checkerboardBg }}></div>
                       )}
-                      {/* Color layer */}
                       <div className="absolute inset-0" style={{ background: bg.value }}></div>
                     </button>
                   ))}
-                  
-                  {/* Custom Color Picker Button */}
                   <label className="w-10 h-10 rounded-full border-2 border-zinc-100 dark:border-zinc-800 cursor-pointer flex items-center justify-center hover:scale-110 transition-all bg-zinc-50 dark:bg-zinc-800 group overflow-hidden">
                     <svg className="w-4 h-4 text-zinc-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    <input 
-                      type="color" 
-                      className="absolute opacity-0 pointer-events-none" 
-                      onChange={(e) => setSelectedBg(e.target.value)}
-                    />
+                    <input type="color" className="absolute opacity-0 pointer-events-none" onChange={(e) => setSelectedBg(e.target.value)} />
                   </label>
                 </div>
               </div>
