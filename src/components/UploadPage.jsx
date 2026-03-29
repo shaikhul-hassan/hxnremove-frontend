@@ -40,9 +40,19 @@ export default function UploadPage() {
     setStatus('loading');
     const formData = new FormData();
     formData.append('image', file);
+    
     try {
-      const res = await fetch('https://overemphatically-spotty-karyn.ngrok-free.dev/api/background/remove', { method: 'POST', body: formData });
+      const res = await fetch('https://overemphatically-spotty-karyn.ngrok-free.dev/api/background/remove', { 
+        method: 'POST', 
+        body: formData,
+        // ADD THESE HEADERS BELOW
+        headers: {
+          'ngrok-skip-browser-warning': '69420',
+        },
+      });
+
       if (!res.ok) throw new Error('Processing failed');
+      
       const blob = await res.blob();
       setResult(URL.createObjectURL(blob));
       setStatus('success');
