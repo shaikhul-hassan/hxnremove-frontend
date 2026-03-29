@@ -40,7 +40,7 @@ export default function UploadPage() {
     const formData = new FormData();
     formData.append('image', file);
     try {
-      const res = await fetch('http://localhost:8081/api/background/remove', { method: 'POST', body: formData });
+      const res = await fetch('https://overemphatically-spotty-karyn.ngrok-free.dev/api/background/remove', { method: 'POST', body: formData });
       if (!res.ok) throw new Error('Processing failed');
       const blob = await res.blob();
       setResult(URL.createObjectURL(blob));
